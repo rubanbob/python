@@ -1,18 +1,15 @@
 import jaydebeapi
 import glob
 
-# Dependencies
-# pip install JayDeBeApi
-
-
-jar_path = (glob.glob('/opt/project/jars/*.jar')) # list all jar's in the dir
+jar_path = (glob.glob('./jars/*.jar')) # list all jar's in the dir
+print("available jar in path :",jar_path)
 
 def main():
     try:
         # create JDBC connection
-        conn = jaydebeapi.connect("org.dbKind.jdbcDriver",
-                                "jdbc:<dbType>://<host>:<port>/<db-name>",
-                                ["username", "password"],
+        conn = jaydebeapi.connect("org.postgresql.Driver",
+                                "jdbc:postgres://<host>:5432/<db-name>",
+                                ["postgres", "postgres-password"],
                                 jar_path,)
         # init Cursor
         curs = conn.cursor()
@@ -24,6 +21,7 @@ def main():
             curs.close()
             conn.close()
         except Exception as e:
+            conn.close()
             print("SQL query execution failed : ",e)
 
     except Exception as e:
