@@ -4,17 +4,17 @@ import glob
 jar_path = (glob.glob('./jars/*.jar')) # list all jar's in the dir
 print("available jar in path :",jar_path)
 
-def main():
+def main(jdbc_driver, jdbc_url, jdbc_uname, jdbc_pass, query):
     try:
         # create JDBC connection
-        conn = jaydebeapi.connect("org.postgresql.Driver",
-                                "jdbc:postgres://<host>:5432/<db-name>",
-                                ["postgres", "postgres-password"],
+        conn = jaydebeapi.connect(jdbc_driver,
+                                jdbc_url,
+                                [jdbc_uname, jdbc_pass],
                                 jar_path,)
         # init Cursor
         curs = conn.cursor()
         try:
-            curs.execute("select * from TABLENAME")
+            curs.execute(query)
             #rows = curs.fetchall()
             while True:
                 # fetch in batch
@@ -34,4 +34,13 @@ def main():
 
 if __name__ == "__main__":
     print("Starting JDBC conneciton..")
-    main()
+
+    # inputs
+    jdbc_driver = "org.postgresql.Driver"
+    jdbc_url = "jdbc:postgres://<host>:5432/<db-name>"
+    jdbc_uname = "postgres"
+    jdbc_pass = "postgres-password"
+
+    query =  "select * from TABLENAME"
+
+    main(jdbc_driver, jdbc_url, jdbc_uname, jdbc_pass, query)
