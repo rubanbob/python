@@ -15,9 +15,14 @@ def main():
         curs = conn.cursor()
         try:
             curs.execute("select * from TABLENAME")
-            results = curs.fetchall()
-            for result in results:
-                print(result)
+            #rows = curs.fetchall()
+            while True:
+                # fetch in batch
+                rows = curs.fetchmany(1000)
+                if not rows:
+                    break
+                for row in rows:
+                    print(row)
             curs.close()
             conn.close()
         except Exception as e:
